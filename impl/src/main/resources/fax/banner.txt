@@ -1,0 +1,7 @@
+    _________   _  __
+   / ____/   | | |/ /
+  / /_  / /| | |   /
+ / __/ / ___ |/   |
+/_/   /_/  |_/_/|_|
+
+${application.version} - made by http://patorjk.com/software/taag/#p=display&f=Slant&t=FAX

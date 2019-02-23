@@ -1,0 +1,6 @@
+rootProject.name = 'pico-erp-fax'
+include 'api'
+include 'impl'
+include 'test'
+include 'twilio-aws-s3'
+
