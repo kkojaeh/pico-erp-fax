@@ -11,21 +11,4 @@ dependencies {
 
   compile("com.github.kkojaeh.pico-erp-user:api:${userVersion}")
 
-  compile("com.github.kkojaeh.pico-erp-company:api:${companyVersion}")
-
-  compile("com.github.kkojaeh.pico-erp-item:api:${itemVersion}")
-
-  //compile("com.github.kkojaeh.pico-erp-comment:api:${commentVersion}")
-
-  compile("com.github.kkojaeh.pico-erp-audit:api:${auditVersion}")
-
-  compile("com.github.kkojaeh.pico-erp-project:api:${projectVersion}")
-
-  compile("com.github.kkojaeh.pico-erp-order-acceptance:api:${orderAcceptanceVersion}")
-
-  compile("com.github.kkojaeh.pico-erp-production-plan:api:${productionPlanVersion}")
-
-  compile("com.github.kkojaeh.pico-erp-process:api:${processVersion}")
-
-
 }
