@@ -69,6 +69,7 @@ public class FaxEntity implements Serializable {
   })
   FaxExecuteId executeId;
 
+  @Column(name = "_TERMINATED")
   boolean terminated;
 
 }

@@ -6,7 +6,7 @@ create table fax_fax (
 	executed_date datetime,
 	requested_date datetime,
 	requester_id varchar(50),
-	terminated bit not null,
+	_terminated bit not null,
 	primary key (id)
 ) engine=InnoDB;
 
