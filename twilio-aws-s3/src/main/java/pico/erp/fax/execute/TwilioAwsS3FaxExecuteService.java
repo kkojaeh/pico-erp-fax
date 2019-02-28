@@ -50,13 +50,6 @@ public class TwilioAwsS3FaxExecuteService implements FaxExecuteService {
     Status.CANCELED
   );
 
-  public TwilioAwsS3FaxExecuteService(Config config) {
-    amazonS3 = config.getAmazonS3();
-    amazonS3BucketName = config.getAmazonS3BucketName();
-    twilioFaxFrom = config.getTwilioFaxFrom();
-    Twilio.init(config.getTwilioAccountSid(), config.getTwilioAuthToken());
-  }
-
   @Override
   public void clear(ClearRequest request) {
     val executeId = request.getId().getValue();
@@ -66,11 +59,30 @@ public class TwilioAwsS3FaxExecuteService implements FaxExecuteService {
     );
     FaxFetcher faxFetcher = Fax.fetcher(executeId);
     Fax fax = faxFetcher.fetch();
-    if (processing.contains(fax.getStatus())) {
+    if (isProcessing(fax)) {
       FaxUpdater faxUpdater = Fax.updater(executeId);
       faxUpdater.setStatus(UpdateStatus.CANCELED);
       faxUpdater.update();
     }
+  }
+
+  private boolean isCompleted(Fax fax) {
+    return completed.contains(fax.getStatus());
+  }
+
+  private boolean isFailed(Fax fax) {
+    return failed.contains(fax.getStatus());
+  }
+
+  public TwilioAwsS3FaxExecuteService(Config config) {
+    amazonS3 = config.getAmazonS3();
+    amazonS3BucketName = config.getAmazonS3BucketName();
+    twilioFaxFrom = config.getTwilioFaxFrom();
+    Twilio.init(config.getTwilioAccountSid(), config.getTwilioAuthToken());
+  }
+
+  private boolean isProcessing(Fax fax) {
+    return processing.contains(fax.getStatus());
   }
 
   @SneakyThrows
@@ -114,9 +126,11 @@ public class TwilioAwsS3FaxExecuteService implements FaxExecuteService {
     val faxId = request.getFaxId().toString();
     FaxFetcher faxFetcher = Fax.fetcher(executeId);
     Fax previous = faxFetcher.fetch();
-    FaxUpdater faxUpdater = Fax.updater(executeId);
-    faxUpdater.setStatus(UpdateStatus.CANCELED);
-    faxUpdater.update();
+    if (isProcessing(previous)) {
+      FaxUpdater faxUpdater = Fax.updater(executeId);
+      faxUpdater.setStatus(UpdateStatus.CANCELED);
+      faxUpdater.update();
+    }
     val uri = amazonS3.generatePresignedUrl(
       amazonS3BucketName,
       faxId,
@@ -133,9 +147,9 @@ public class TwilioAwsS3FaxExecuteService implements FaxExecuteService {
   private FaxExecuteData to(Fax fax) {
     return FaxExecuteData.builder()
       .id(FaxExecuteId.from(fax.getSid()))
-      .completed(completed.contains(fax.getStatus()))
-      .failed(failed.contains(fax.getStatus()))
-      .processing(processing.contains(fax.getStatus()))
+      .completed(isCompleted(fax))
+      .failed(isFailed(fax))
+      .processing(isProcessing(fax))
       .build();
 
   }
