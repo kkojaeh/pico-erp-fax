@@ -77,7 +77,7 @@ public class Fax implements Serializable {
         );
       } else if (previous.isFailed()) {
         val now = OffsetDateTime.now();
-        val yet = executedDate.plusSeconds(request.getRetryIntervalSeconds()).isBefore(now);
+        val yet = executedDate.plusSeconds(request.getRetryIntervalSeconds()).isAfter(now);
         if (yet) {
           return new FaxMessages.Execute.Response(
             Collections.emptyList()
