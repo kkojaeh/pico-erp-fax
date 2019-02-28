@@ -72,4 +72,7 @@ public class FaxEntity implements Serializable {
   @Column(name = "_TERMINATED")
   boolean terminated;
 
+  @Column(name = "_FAILED")
+  boolean failed;
+
 }

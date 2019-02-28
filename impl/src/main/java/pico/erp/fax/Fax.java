@@ -46,9 +46,12 @@ public class Fax implements Serializable {
 
   boolean terminated;
 
+  boolean failed;
+
   public Fax() {
     executedCount = 0;
     terminated = false;
+    failed = false;
   }
 
   public FaxMessages.Create.Response apply(
@@ -90,6 +93,7 @@ public class Fax implements Serializable {
 
         if (expired || limited) {
           terminated = true;
+          failed = true;
           return new FaxMessages.Execute.Response(
             Arrays.asList(new FaxEvents.FailedEvent(id))
           );

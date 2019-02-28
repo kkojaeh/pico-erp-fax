@@ -50,6 +50,13 @@ public class TwilioAwsS3FaxExecuteService implements FaxExecuteService {
     Status.CANCELED
   );
 
+  public TwilioAwsS3FaxExecuteService(Config config) {
+    amazonS3 = config.getAmazonS3();
+    amazonS3BucketName = config.getAmazonS3BucketName();
+    twilioFaxFrom = config.getTwilioFaxFrom();
+    Twilio.init(config.getTwilioAccountSid(), config.getTwilioAuthToken());
+  }
+
   @Override
   public void clear(ClearRequest request) {
     val executeId = request.getId().getValue();
@@ -64,25 +71,6 @@ public class TwilioAwsS3FaxExecuteService implements FaxExecuteService {
       faxUpdater.setStatus(UpdateStatus.CANCELED);
       faxUpdater.update();
     }
-  }
-
-  private boolean isCompleted(Fax fax) {
-    return completed.contains(fax.getStatus());
-  }
-
-  private boolean isFailed(Fax fax) {
-    return failed.contains(fax.getStatus());
-  }
-
-  public TwilioAwsS3FaxExecuteService(Config config) {
-    amazonS3 = config.getAmazonS3();
-    amazonS3BucketName = config.getAmazonS3BucketName();
-    twilioFaxFrom = config.getTwilioFaxFrom();
-    Twilio.init(config.getTwilioAccountSid(), config.getTwilioAuthToken());
-  }
-
-  private boolean isProcessing(Fax fax) {
-    return processing.contains(fax.getStatus());
   }
 
   @SneakyThrows
@@ -117,6 +105,18 @@ public class TwilioAwsS3FaxExecuteService implements FaxExecuteService {
     FaxFetcher faxFetcher = Fax.fetcher(id.getValue());
     Fax fax = faxFetcher.fetch();
     return to(fax);
+  }
+
+  private boolean isCompleted(Fax fax) {
+    return completed.contains(fax.getStatus());
+  }
+
+  private boolean isFailed(Fax fax) {
+    return failed.contains(fax.getStatus());
+  }
+
+  private boolean isProcessing(Fax fax) {
+    return processing.contains(fax.getStatus());
   }
 
   @SneakyThrows

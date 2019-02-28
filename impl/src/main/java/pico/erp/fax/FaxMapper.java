@@ -18,8 +18,11 @@ public abstract class FaxMapper {
       .executedCount(entity.getExecutedCount())
       .executeId(entity.getExecuteId())
       .terminated(entity.isTerminated())
+      .failed(entity.isFailed())
       .build();
   }
+
+  public abstract FaxData map(Fax fax);
 
   public abstract FaxMessages.Create.Request map(
     FaxRequests.SendRequest request);

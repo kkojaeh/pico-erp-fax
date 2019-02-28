@@ -49,6 +49,13 @@ public class FaxServiceLogic implements FaxService {
   }
 
   @Override
+  public FaxData get(FaxId id) {
+    return faxRepository.findBy(id)
+      .map(mapper::map)
+      .orElseThrow(FaxExceptions.NotFoundException::new);
+  }
+
+  @Override
   public void revalidate(RevalidateRequest request) {
     faxRepository.findAllProcessing().forEach(fax -> {
       val response = fax.apply(
@@ -80,7 +87,7 @@ public class FaxServiceLogic implements FaxService {
   }
 
   @Override
-  public void send(SendRequest request) {
+  public FaxData send(SendRequest request) {
     val fax = create(request);
     val response = fax.apply(
       FaxMessages.Execute.Request.builder()
@@ -99,6 +106,7 @@ public class FaxServiceLogic implements FaxService {
     );
     faxRepository.update(fax);
     eventPublisher.publishEvents(response.getEvents());
+    return mapper.map(fax);
   }
 
 }
