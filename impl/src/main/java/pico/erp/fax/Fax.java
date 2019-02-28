@@ -77,14 +77,14 @@ public class Fax implements Serializable {
         );
       } else if (previous.isFailed()) {
         val now = OffsetDateTime.now();
-        val yet = executedDate.plusSeconds(request.getRetryIntervalSeconds()).isAfter(now);
+        val yet = now.isBefore(executedDate.plusSeconds(request.getRetryIntervalSeconds()));
         if (yet) {
           return new FaxMessages.Execute.Response(
             Collections.emptyList()
           );
         }
         // 제한시간 초과
-        val expired = requestedDate.plusSeconds(request.getExpirationSeconds()).isAfter(now);
+        val expired = now.isAfter(requestedDate.plusSeconds(request.getExpirationSeconds()));
         // 제한횟수 초과
         val limited = executedCount > request.getRetryLimit();
 
