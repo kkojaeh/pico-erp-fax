@@ -66,7 +66,7 @@ public class TwilioAwsS3FaxExecuteService implements FaxExecuteService {
     );
     FaxFetcher faxFetcher = Fax.fetcher(executeId);
     Fax fax = faxFetcher.fetch();
-    if (!completed.contains(fax.getStatus())) {
+    if (!completed.contains(fax.getStatus()) || !failed.contains(fax.getStatus())) {
       FaxUpdater faxUpdater = Fax.updater(executeId);
       faxUpdater.setStatus(UpdateStatus.CANCELED);
       faxUpdater.update();
