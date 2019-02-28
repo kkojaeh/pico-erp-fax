@@ -53,6 +53,7 @@ public class FaxServiceLogic implements FaxService {
     faxRepository.findAllProcessing().forEach(fax -> {
       val response = fax.apply(
         FaxMessages.Execute.Request.builder()
+          .previous(faxExecuteService.get(fax.getExecuteId()))
           .retry(
             () -> faxExecuteService.retry(
               FaxExecuteRequests.RetryRequest.builder()
