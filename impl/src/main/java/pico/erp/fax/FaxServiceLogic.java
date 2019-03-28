@@ -1,5 +1,6 @@
 package pico.erp.fax;
 
+import kkojaeh.spring.boot.component.Give;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -10,12 +11,11 @@ import pico.erp.fax.FaxRequests.RevalidateRequest;
 import pico.erp.fax.FaxRequests.SendRequest;
 import pico.erp.fax.execute.FaxExecuteRequests;
 import pico.erp.fax.execute.FaxExecuteService;
-import pico.erp.shared.Public;
 import pico.erp.shared.event.EventPublisher;
 
 @SuppressWarnings("Duplicates")
 @Service
-@Public
+@Give
 @Transactional
 @Validated
 public class FaxServiceLogic implements FaxService {

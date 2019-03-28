@@ -1,6 +1,6 @@
 package pico.erp.fax;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import lombok.Data;
 import pico.erp.fax.execute.FaxExecuteId;
 import pico.erp.user.UserId;
@@ -14,9 +14,9 @@ public class FaxData {
 
   UserId requesterId;
 
-  OffsetDateTime requestedDate;
+  LocalDateTime requestedDate;
 
-  OffsetDateTime executedDate;
+  LocalDateTime executedDate;
 
   int executedCount;
 
