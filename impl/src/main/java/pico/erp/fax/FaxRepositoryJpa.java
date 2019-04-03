@@ -1,6 +1,6 @@
 package pico.erp.fax;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.stream.Stream;
 import lombok.val;
@@ -16,7 +16,7 @@ interface FaxEntityRepository extends
   CrudRepository<FaxEntity, FaxId> {
 
   @Query("SELECT f FROM Fax f WHERE f.requestedDate > :date AND f.terminated = false")
-  Stream<FaxEntity> findAllProcessing(@Param("date") OffsetDateTime date);
+  Stream<FaxEntity> findAllProcessing(@Param("date") LocalDateTime date);
 
 }
 
@@ -40,29 +40,29 @@ public class FaxRepositoryJpa implements FaxRepository {
 
   @Override
   public void deleteBy(FaxId id) {
-    repository.delete(id);
+    repository.deleteById(id);
   }
 
   @Override
   public boolean exists(FaxId id) {
-    return repository.exists(id);
+    return repository.existsById(id);
   }
 
   @Override
   public Stream<Fax> findAllProcessing() {
-    return repository.findAllProcessing(OffsetDateTime.now().minusDays(3))
+    return repository.findAllProcessing(LocalDateTime.now().minusDays(3))
       .map(mapper::jpa);
   }
 
   @Override
   public Optional<Fax> findBy(FaxId id) {
-    return Optional.ofNullable(repository.findOne(id))
+    return repository.findById(id)
       .map(mapper::jpa);
   }
 
   @Override
   public void update(Fax fax) {
-    val entity = repository.findOne(fax.getId());
+    val entity = repository.findById(fax.getId()).get();
     mapper.pass(mapper.jpa(fax), entity);
     repository.save(entity);
   }
