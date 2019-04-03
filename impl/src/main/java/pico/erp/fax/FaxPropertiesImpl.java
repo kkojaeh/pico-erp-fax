@@ -1,11 +1,11 @@
 package pico.erp.fax;
 
-import kkojaeh.spring.boot.component.Give;
+import kkojaeh.spring.boot.component.ComponentBean;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-@Give
+@ComponentBean
 @Data
 @Configuration
 @ConfigurationProperties("fax")
