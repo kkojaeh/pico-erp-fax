@@ -2,7 +2,7 @@ package pico.erp.fax;
 
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -57,10 +57,10 @@ public class FaxEntity implements Serializable {
   UserId requesterId;
 
   @Column
-  LocalDateTime requestedDate;
+  OffsetDateTime requestedDate;
 
   @Column
-  LocalDateTime executedDate;
+  OffsetDateTime executedDate;
 
   int executedCount;
 

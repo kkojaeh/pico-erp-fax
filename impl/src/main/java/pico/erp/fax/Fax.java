@@ -1,7 +1,7 @@
 package pico.erp.fax;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import javax.persistence.Id;
@@ -36,9 +36,9 @@ public class Fax implements Serializable {
 
   UserId requesterId;
 
-  LocalDateTime requestedDate;
+  OffsetDateTime requestedDate;
 
-  LocalDateTime executedDate;
+  OffsetDateTime executedDate;
 
   int executedCount;
 
@@ -59,7 +59,7 @@ public class Fax implements Serializable {
     this.id = request.getId();
     this.description = request.getDescription();
     this.requesterId = request.getRequesterId();
-    this.requestedDate = LocalDateTime.now();
+    this.requestedDate = OffsetDateTime.now();
     return new FaxMessages.Create.Response(
       Collections.emptyList()
     );
@@ -79,7 +79,7 @@ public class Fax implements Serializable {
           Collections.emptyList()
         );
       } else if (previous.isFailed()) {
-        val now = LocalDateTime.now();
+        val now = OffsetDateTime.now();
         val yet = now.isBefore(executedDate.plusSeconds(request.getRetryIntervalSeconds()));
         if (yet) {
           return new FaxMessages.Execute.Response(
@@ -104,7 +104,7 @@ public class Fax implements Serializable {
     val execute = executedCount > 0 ? request.retry() : request.execute();
     this.executeId = execute.getId();
     this.executedCount++;
-    this.executedDate = LocalDateTime.now();
+    this.executedDate = OffsetDateTime.now();
     return new FaxMessages.Execute.Response(
       Collections.emptyList()
     );

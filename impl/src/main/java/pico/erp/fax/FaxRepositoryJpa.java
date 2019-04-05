@@ -1,6 +1,6 @@
 package pico.erp.fax;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Optional;
 import java.util.stream.Stream;
 import lombok.val;
@@ -16,7 +16,7 @@ interface FaxEntityRepository extends
   CrudRepository<FaxEntity, FaxId> {
 
   @Query("SELECT f FROM Fax f WHERE f.requestedDate > :date AND f.terminated = false")
-  Stream<FaxEntity> findAllProcessing(@Param("date") LocalDateTime date);
+  Stream<FaxEntity> findAllProcessing(@Param("date") OffsetDateTime date);
 
 }
 
@@ -50,7 +50,7 @@ public class FaxRepositoryJpa implements FaxRepository {
 
   @Override
   public Stream<Fax> findAllProcessing() {
-    return repository.findAllProcessing(LocalDateTime.now().minusDays(3))
+    return repository.findAllProcessing(OffsetDateTime.now().minusDays(3))
       .map(mapper::jpa);
   }
 
